@@ -10,6 +10,7 @@ class USphereComponent;
 class USkeletalMeshComponent;
 class USpringArmComponent;
 class UCameraComponent;
+struct FInputActionValue;
 
 UCLASS()
 class DRONE_API ASpartaDrone : public APawn
@@ -38,4 +39,16 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* CameraComponent;
+
+/* Enhanced Input */
+private:
+	UFUNCTION()
+	void MoveForward(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void MoveRight(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void Look(const FInputActionValue& Value);
+
 };

@@ -6,6 +6,9 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "EnhancedInputComponent.h"
+#include "Player/DronePlayerController.h"
+#include "InputActionValue.h"
 
 ASpartaDrone::ASpartaDrone()
 {
@@ -45,5 +48,32 @@ void ASpartaDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UEnhancedInputComponent* EnhancedInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	ADronePlayerController* DroneController = CastChecked<ADronePlayerController>(GetController());
+
+	if (DroneController->MoveForwardAction)
+	{
+		EnhancedInput->BindAction(DroneController->MoveForwardAction, ETriggerEvent::Triggered, this, &ASpartaDrone::MoveForward);
+	}
+	if (DroneController->MoveRightAction)
+	{
+		EnhancedInput->BindAction(DroneController->MoveRightAction, ETriggerEvent::Triggered, this, &ASpartaDrone::MoveRight);
+	}
+	if (DroneController->LookAction)
+	{
+		EnhancedInput->BindAction(DroneController->LookAction, ETriggerEvent::Triggered, this, &ASpartaDrone::Look);
+	}
+}
+
+void ASpartaDrone::MoveForward(const FInputActionValue& Value)
+{
+}
+
+void ASpartaDrone::MoveRight(const FInputActionValue& Value)
+{
+}
+
+void ASpartaDrone::Look(const FInputActionValue& Value)
+{
 }
 
