@@ -26,7 +26,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Collision")
 	USphereComponent* SphereComponent;
 
@@ -36,6 +36,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	USpringArmComponent* SpringArmComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Cateogory = "Camera")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* CameraComponent;
 };
