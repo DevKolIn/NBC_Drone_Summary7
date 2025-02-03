@@ -6,6 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "DronePlayerController.generated.h"
 
+
+class UInputMappingContext;
+class UInputAction;
 /**
  * 
  */
@@ -13,5 +16,20 @@ UCLASS()
 class DRONE_API ADronePlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
+	UInputMappingContext* InputMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
+	UInputAction* MoveForwardAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
+	UInputAction* MoveRightAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Input")
+	UInputAction* LookAction;
+
+protected:
+	virtual void BeginPlay() override;
 };
