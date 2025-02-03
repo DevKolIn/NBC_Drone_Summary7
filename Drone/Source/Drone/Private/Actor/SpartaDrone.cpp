@@ -69,8 +69,8 @@ void ASpartaDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void ASpartaDrone::MoveForward(const FInputActionValue& Value)
 {
 	float InputValue = Value.Get<float>();
-	FVector CameraForward = CameraComponent->GetForwardVector();
-	FVector MoveVector = CameraForward * InputValue * NormalSpeed;
+	FVector MoveDirection = CameraComponent->GetForwardVector() * InputValue;
+	FVector MoveVector = MoveDirection * NormalSpeed;
 
 	AddActorLocalOffset(MoveVector);
 }

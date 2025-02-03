@@ -56,6 +56,4 @@ private:
 
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
-
-
 };
