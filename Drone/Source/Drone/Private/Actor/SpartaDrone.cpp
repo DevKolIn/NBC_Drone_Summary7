@@ -28,6 +28,7 @@ ASpartaDrone::ASpartaDrone()
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 300.f;
+	SpringArmComponent->bUsePawnControlRotation = false;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
@@ -77,9 +78,18 @@ void ASpartaDrone::MoveForward(const FInputActionValue& Value)
 
 void ASpartaDrone::MoveRight(const FInputActionValue& Value)
 {
+	float InputValue = Value.Get<float>();
+	FVector MoveDirection = CameraComponent->GetRightVector() * InputValue;
+	FVector MoveVector = MoveDirection * NormalSpeed;
+
+	AddActorLocalOffset(MoveDirection);
 }
 
 void ASpartaDrone::Look(const FInputActionValue& Value)
 {
+	FVector2D InputValue = Value.Get<FVector2D>();
+	FRotator Rotator(InputValue.Y, InputValue.X, 0.f);
+	
+	CameraComponent->AddLocalRotation(Rotator);
 }
 
