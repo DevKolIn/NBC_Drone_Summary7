@@ -27,6 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+/* Basic */
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Collision")
 	USphereComponent* SphereComponent;
@@ -40,6 +41,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Camera")
 	UCameraComponent* CameraComponent;
 
+/* Control */
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+	float NormalSpeed;
+
 /* Enhanced Input */
 private:
 	UFUNCTION()
@@ -50,5 +56,6 @@ private:
 
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
+
 
 };

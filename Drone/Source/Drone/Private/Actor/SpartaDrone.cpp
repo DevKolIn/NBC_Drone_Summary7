@@ -11,6 +11,7 @@
 #include "InputActionValue.h"
 
 ASpartaDrone::ASpartaDrone()
+:NormalSpeed(10.f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -67,6 +68,11 @@ void ASpartaDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void ASpartaDrone::MoveForward(const FInputActionValue& Value)
 {
+	float InputValue = Value.Get<float>();
+	FVector CameraForward = CameraComponent->GetForwardVector();
+	FVector MoveVector = CameraForward * InputValue * NormalSpeed;
+
+	AddActorLocalOffset(MoveVector);
 }
 
 void ASpartaDrone::MoveRight(const FInputActionValue& Value)
