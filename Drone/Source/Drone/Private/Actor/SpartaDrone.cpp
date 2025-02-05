@@ -11,7 +11,7 @@
 #include "InputActionValue.h"
 
 ASpartaDrone::ASpartaDrone()
-:NormalSpeed(10.f)
+:MoveSpeed(600.f), LookSpeed(300.f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -26,7 +26,7 @@ ASpartaDrone::ASpartaDrone()
 
 	/* 카메라 설정 */
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	SpringArmComponent->SetupAttachment(GetRootComponent());
+	SpringArmComponent->SetupAttachment(SphereComponent);
 	SpringArmComponent->TargetArmLength = 300.f;
 	SpringArmComponent->bUsePawnControlRotation = false;
 
@@ -61,17 +61,25 @@ void ASpartaDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	{
 		EnhancedInput->BindAction(DroneController->MoveRightAction, ETriggerEvent::Triggered, this, &ASpartaDrone::MoveRight);
 	}
+	if (DroneController->MoveUpDownAction)
+	{
+		EnhancedInput->BindAction(DroneController->MoveUpDownAction, ETriggerEvent::Triggered, this, &ASpartaDrone::MoveUpDown);
+	}
 	if (DroneController->LookAction)
 	{
 		EnhancedInput->BindAction(DroneController->LookAction, ETriggerEvent::Triggered, this, &ASpartaDrone::Look);
+	}
+	if (DroneController->RollAction)
+	{
+		EnhancedInput->BindAction(DroneController->RollAction, ETriggerEvent::Triggered, this, &ASpartaDrone::Roll);
 	}
 }
 
 void ASpartaDrone::MoveForward(const FInputActionValue& Value)
 {
 	float InputValue = Value.Get<float>();
-	FVector MoveDirection = CameraComponent->GetForwardVector() * InputValue;
-	FVector MoveVector = MoveDirection * NormalSpeed;
+	FVector MoveDirection(InputValue, 0.f, 0.f);
+	FVector MoveVector = MoveDirection * MoveSpeed * GetWorld()->GetDeltaSeconds();
 
 	AddActorLocalOffset(MoveVector);
 }
@@ -79,8 +87,17 @@ void ASpartaDrone::MoveForward(const FInputActionValue& Value)
 void ASpartaDrone::MoveRight(const FInputActionValue& Value)
 {
 	float InputValue = Value.Get<float>();
-	FVector MoveDirection = CameraComponent->GetRightVector() * InputValue;
-	FVector MoveVector = MoveDirection * NormalSpeed;
+	FVector MoveDirection(0.f, InputValue, 0.f);
+	FVector MoveVector = MoveDirection * MoveSpeed * GetWorld()->GetDeltaSeconds();
+
+	AddActorLocalOffset(MoveDirection);
+}
+
+void ASpartaDrone::MoveUpDown(const FInputActionValue& Value)
+{
+	float InputValue = Value.Get<float>();
+	FVector MoveDirection(0.f, 0.f, InputValue);
+	FVector MoveVector = MoveDirection * MoveSpeed * GetWorld()->GetDeltaSeconds();
 
 	AddActorLocalOffset(MoveDirection);
 }
@@ -91,5 +108,11 @@ void ASpartaDrone::Look(const FInputActionValue& Value)
 	FRotator Rotator(InputValue.Y, InputValue.X, 0.f);
 	
 	CameraComponent->AddLocalRotation(Rotator);
+}
+
+void ASpartaDrone::Roll(const FInputActionValue& Value)
+{
+	float InputValue = Value.Get<float>();
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, FString::Printf(TEXT("%f"), InputValue));
 }
 

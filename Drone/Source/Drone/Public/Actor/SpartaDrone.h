@@ -44,7 +44,10 @@ protected:
 /* Control */
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
-	float NormalSpeed;
+	float MoveSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+	float LookSpeed;
 
 /* Enhanced Input */
 private:
@@ -53,7 +56,13 @@ private:
 
 	UFUNCTION()
 	void MoveRight(const FInputActionValue& Value);
-
+	
+	UFUNCTION()
+	void MoveUpDown(const FInputActionValue& Value);
+	
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void Roll(const FInputActionValue& Value);
 };
