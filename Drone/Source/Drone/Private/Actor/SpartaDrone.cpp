@@ -32,6 +32,11 @@ ASpartaDrone::ASpartaDrone()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
+
+	/* 속도 계산 */
+	PreviousPosition = FVector::ZeroVector;
+	PreviousVelocity = FVector::ZeroVector;
+	Acceleration = FVector::ZeroVector;
 }
 
 void ASpartaDrone::BeginPlay()
@@ -78,6 +83,7 @@ void ASpartaDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void ASpartaDrone::MoveForward(const FInputActionValue& Value)
 {
 	float InputValue = Value.Get<float>();
+
 	FVector MoveDirection(InputValue, 0.f, 0.f);
 	FVector MoveVector = MoveDirection * MoveSpeed * GetWorld()->GetDeltaSeconds();
 
@@ -116,3 +122,10 @@ void ASpartaDrone::Roll(const FInputActionValue& Value)
 	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow, FString::Printf(TEXT("%f"), InputValue));
 }
 
+void ASpartaDrone::UpdateVelocity(float DeltaTime)
+{
+	FVector CurrentPosition = GetActorLocation();
+	CurrentVelocity = (CurrentPosition - PreviousPosition) / DeltaTime;
+	PreviousPosition = CurrentPosition;
+	PreviousVelocity = CurrentVelocity;
+}

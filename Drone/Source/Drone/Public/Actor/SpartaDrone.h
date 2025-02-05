@@ -49,6 +49,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
 	float LookSpeed;
 
+	void UpdateVelocity(float DeltaTime);
+	/* 속력 */
+	FVector PreviousPosition;
+	FVector PreviousVelocity;
+	FVector CurrentVelocity;
 /* Enhanced Input */
 private:
 	UFUNCTION()
