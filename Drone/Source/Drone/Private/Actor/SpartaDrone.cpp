@@ -130,7 +130,7 @@ void ASpartaDrone::MoveUpDown(const FInputActionValue& Value)
 void ASpartaDrone::Look(const FInputActionValue& Value)
 {
 	FVector2D InputValue = Value.Get<FVector2D>();
-	FRotator Rotator(0.f, InputValue.X, 0.f);
+	FRotator Rotator(InputValue.Y, InputValue.X, 0.f);
 	
 	AddActorLocalRotation(Rotator);
 }
