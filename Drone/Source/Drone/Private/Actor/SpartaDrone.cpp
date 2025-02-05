@@ -45,7 +45,7 @@ ASpartaDrone::ASpartaDrone()
 
 	/* ม฿ทย */
 	GravityStrength = -98.f;
-	TraceDistance = 98.f;
+	TraceDistance = 48.f;
 	bIsGrounded = false;
 }
 
@@ -115,6 +115,12 @@ void ASpartaDrone::MoveRight(const FInputActionValue& Value)
 void ASpartaDrone::MoveUpDown(const FInputActionValue& Value)
 {
 	float InputValue = Value.Get<float>();
+
+	if (InputValue < 0 && bIsGrounded)
+	{
+		return;
+	}
+
 	FVector MoveDirection(0.f, 0.f, InputValue);
 	FVector MoveVector = MoveDirection * MoveSpeed * GetWorld()->GetDeltaSeconds();
 
