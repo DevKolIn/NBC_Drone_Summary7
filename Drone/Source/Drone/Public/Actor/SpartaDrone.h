@@ -49,11 +49,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
 	float LookSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+	float MaxTiltAngle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+	float TilitSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Control")
+	float TilitRestoreSpeed;
+
+private:
 	void UpdateVelocity(float DeltaTime);
 	void UpdateGravity(float DeltaTime);
 	bool IsGround();
 
-	/* ÏÜçÎ†• */
+	/* º”∑¬ */
 	FVector PreviousPosition;
 	FVector PreviousVelocity;
 	FVector CurrentVelocity;

@@ -11,7 +11,6 @@
 #include "InputActionValue.h"
 
 ASpartaDrone::ASpartaDrone()
-:MoveSpeed(600.f), LookSpeed(300.f)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -26,18 +25,25 @@ ASpartaDrone::ASpartaDrone()
 
 	/* Ä«¸Þ¶ó ¼³Á¤ */
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	SpringArmComponent->SetupAttachment(SphereComponent);
+	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->TargetArmLength = 300.f;
 	SpringArmComponent->bUsePawnControlRotation = false;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
-	/* ì†ë„ ê³„ì‚° */
+	/* ÄÁÆ®·Ñ ¼³Á¤ */
+	MoveSpeed = 600.f;
+	LookSpeed = 300.f;
+	MaxTiltAngle = 20.f;
+	TilitSpeed = 20.f;
+	TilitRestoreSpeed = 2.f;
+
+	/* ¼Óµµ */
 	PreviousPosition = FVector::ZeroVector;
 	PreviousVelocity = FVector::ZeroVector;
 
-	/* ì¤‘ë ¥ */
+	/* Áß·Â */
 	GravityStrength = -98.f;
 	TraceDistance = 98.f;
 	bIsGrounded = false;
@@ -46,7 +52,7 @@ ASpartaDrone::ASpartaDrone()
 void ASpartaDrone::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	PreviousPosition = GetActorLocation();
 }
 
@@ -103,7 +109,7 @@ void ASpartaDrone::MoveRight(const FInputActionValue& Value)
 	FVector MoveDirection(0.f, InputValue, 0.f);
 	FVector MoveVector = MoveDirection * MoveSpeed * GetWorld()->GetDeltaSeconds();
 
-	AddActorLocalOffset(MoveDirection);
+	AddActorLocalOffset(MoveVector);
 }
 
 void ASpartaDrone::MoveUpDown(const FInputActionValue& Value)
@@ -112,15 +118,15 @@ void ASpartaDrone::MoveUpDown(const FInputActionValue& Value)
 	FVector MoveDirection(0.f, 0.f, InputValue);
 	FVector MoveVector = MoveDirection * MoveSpeed * GetWorld()->GetDeltaSeconds();
 
-	AddActorLocalOffset(MoveDirection);
+	AddActorLocalOffset(MoveVector);
 }
 
 void ASpartaDrone::Look(const FInputActionValue& Value)
 {
 	FVector2D InputValue = Value.Get<FVector2D>();
-	FRotator Rotator(InputValue.Y, InputValue.X, 0.f);
+	FRotator Rotator(0.f, InputValue.X, 0.f);
 	
-	CameraComponent->AddLocalRotation(Rotator);
+	AddActorLocalRotation(Rotator);
 }
 
 void ASpartaDrone::Roll(const FInputActionValue& Value)
