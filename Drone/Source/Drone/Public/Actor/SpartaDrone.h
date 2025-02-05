@@ -50,10 +50,18 @@ protected:
 	float LookSpeed;
 
 	void UpdateVelocity(float DeltaTime);
+	void UpdateGravity(float DeltaTime);
+	bool IsGround();
+
 	/* 속력 */
 	FVector PreviousPosition;
 	FVector PreviousVelocity;
 	FVector CurrentVelocity;
+
+	float GravityStrength;
+	float TraceDistance;
+	bool bIsGrounded;
+
 /* Enhanced Input */
 private:
 	UFUNCTION()

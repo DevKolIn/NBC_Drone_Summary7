@@ -36,19 +36,26 @@ ASpartaDrone::ASpartaDrone()
 	/* 속도 계산 */
 	PreviousPosition = FVector::ZeroVector;
 	PreviousVelocity = FVector::ZeroVector;
-	Acceleration = FVector::ZeroVector;
+
+	/* 중력 */
+	GravityStrength = -98.f;
+	TraceDistance = 98.f;
+	bIsGrounded = false;
 }
 
 void ASpartaDrone::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	PreviousPosition = GetActorLocation();
 }
 
 void ASpartaDrone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateVelocity(DeltaTime);
+	UpdateGravity(DeltaTime);
 }
 
 void ASpartaDrone::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -128,4 +135,28 @@ void ASpartaDrone::UpdateVelocity(float DeltaTime)
 	CurrentVelocity = (CurrentPosition - PreviousPosition) / DeltaTime;
 	PreviousPosition = CurrentPosition;
 	PreviousVelocity = CurrentVelocity;
+}
+
+void ASpartaDrone::UpdateGravity(float DeltaTime)
+{
+	bIsGrounded = IsGround();
+
+	if (bIsGrounded == false)
+	{
+		FVector MoveDirection(0.f, 0.f, GravityStrength * DeltaTime);
+		SetActorLocation(GetActorLocation() + MoveDirection);
+	}
+}
+
+bool ASpartaDrone::IsGround()
+{
+	FHitResult HitResult;
+	FVector StartPos = GetActorLocation();
+	FVector EndPos = StartPos - FVector(0, 0, TraceDistance);
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(this);
+
+	GetWorld()->LineTraceSingleByChannel(HitResult, StartPos, EndPos, ECC_Visibility, TraceParams);
+
+	return HitResult.bBlockingHit == true;
 }
